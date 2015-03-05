@@ -1,11 +1,12 @@
 exports.name = "creationix/glfw"
-exports.version = "3.1.1"
+exports.version = "3.1.2"
 exports.homepage = "https://github.com/creationix/lit-glfw"
 
 local ffi = require('ffi')
 local bundle = require('luvi').bundle
 
-require('bundle-action')
+-- Workaround to polyfill bundle.action till luvi is updated.
+require('./bundle-action')
 
 -- Get path
 local base = module.dir:gsub("^bundle:", "") .. '/'
