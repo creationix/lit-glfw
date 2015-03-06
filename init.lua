@@ -5,7 +5,7 @@ exports.files = {
   "*.lua",
   "*.h",
   "**/$OS-$ARCH**",
-}  
+}
 
 local ffi = require('ffi')
 local bundle = require('luvi').bundle
@@ -17,13 +17,23 @@ require('./bundle-action')
 local base = module.dir:gsub("^bundle:", "") .. '/'
 local dir = base .. ffi.os .. "-" .. ffi.arch
 local entries = bundle.readdir(dir)
-local path = dir .. '/' .. entries[1]
+assert(entries and #entries == 2, "Expected 2 entries in arch folder")
+local mainPath, wrapperPath = unpack(entries)
+if mainPath:match("wrapper") then
+  mainPath, wrapperPath = wrapperPath, mainPath
+end
+mainPath = dir .. '/' .. mainPath
+wrapperPath = dir .. '/' .. wrapperPath
 
-local glfw = bundle.action(path, function (path)
+local glfw = bundle.action(mainPath, function (path)
+  return ffi.load(path)
+end)
+local wrapper = bundle.action(wrapperPath, function (path)
   return ffi.load(path)
 end)
 
 ffi.cdef(bundle.readfile(base .. "glfw.h"))
+ffi.cdef(bundle.readfile(base .. "wrapper.h"))
 
-return glfw
+return glfw, wrapper
 
