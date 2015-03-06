@@ -3,4 +3,4 @@
 	url = https://github.com/glfw/glfw.git
 [submodule "glfw-test"]
 	path = glfw-test
-	url = git@github.com:creationix/glfw-test.git
+	url = https://github.com/creationix/glfw-test.git
