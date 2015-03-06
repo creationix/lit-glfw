@@ -35,5 +35,5 @@ end)
 ffi.cdef(bundle.readfile(base .. "glfw.h"))
 ffi.cdef(bundle.readfile(base .. "wrapper.h"))
 
-return glfw, wrapper
+return {glfw, wrapper}
 

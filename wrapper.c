@@ -1,9 +1,13 @@
+#include <GLFW/glfw3.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "wrapper.h"
 
 static GLFWEvent* GLFWEventHead = NULL;
 static GLFWEvent* GLFWEventTail = NULL;
 
 GLFWEvent* GLFWEventShift() {
+  // printf("head=%p tail=%p\n", GLFWEventHead, GLFWEventTail);
   if (!GLFWEventHead) return NULL;
   GLFWEvent* event = GLFWEventHead;
   GLFWEventHead = GLFWEventHead->next;
@@ -38,6 +42,7 @@ void GLFWerrorCallback(int error, const char* description) {
   event->description = description;
 }
 void GLFWwindowposCallback(GLFWwindow* window, int xpos, int ypos) {
+  printf("GLFWwindowposCallback\n");
   GLFWEvent* event = GLFWEventPush();
   event->type = GLFWwindowposevt;
   event->window = window;
@@ -45,11 +50,13 @@ void GLFWwindowposCallback(GLFWwindow* window, int xpos, int ypos) {
   event->ypos = ypos;
 }
 void GLFWwindowsizeCallback(GLFWwindow* window, int width, int height) {
+  printf("GLFWwindowsizeCallback\n");
   GLFWEvent* event = GLFWEventPush();
-  event->type = GLFWwindowposevt;
+  event->type = GLFWwindowsizeevt;
   event->window = window;
   event->width = width;
   event->height = height;
+  glfwPostEmptyEvent();
 }
 // void GLFWwindowcloseCallback(GLFWwindow*) {
 //   GLFWEvent* event = GLFWEventPush();

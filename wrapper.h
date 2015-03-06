@@ -1,5 +1,3 @@
-#include <GLFW/glfw3.h>
-#include <stdlib.h>
 
 // A simple linked list node of events
 // The type field tells you what kind of event data it is.

@@ -17,12 +17,9 @@ all: build
 	cp build/$(WRAPPER_LIB) $(TARGET_DIR)
 
 build:
-	cmake -Bbuild -H. -GNinja \
-	  -DBUILD_SHARED_LIBS=ON \
-	  -DGLFW_BUILD_EXAMPLES=OFF \
-	  -DGLFW_BUILD_TESTS=OFF \
-    -DGLFW_BUILD_DOCS=OFF \
-    -DGLFW_INSTALL=OFF
+	cmake -Bbuild -H. -GNinja  -Wno-dev -DBUILD_SHARED_LIBS=ON \
+	  -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF \
+	  -DGLFW_BUILD_DOCS=OFF -DGLFW_INSTALL=OFF
 
 clean:
 	rm -rf build
