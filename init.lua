@@ -33,7 +33,7 @@ local wrapper = bundle.action(wrapperPath, function (path)
 end)
 
 ffi.cdef(bundle.readfile(base .. "glfw.h"))
-ffi.cdef(bundle.readfile(base .. "wrapper.h"))
+ffi.cdef((bundle.readfile(base .. "wrapper.h"):gsub("^%#[^\n]*", "")))
 
 return {glfw, wrapper}
 
