@@ -12,11 +12,13 @@ local bundle = require('luvi').bundle
 
 -- Workaround to polyfill bundle.action till luvi is updated.
 require('./bundle-action')
+local pathJoin = require('luvi').path.join
 
 -- Get path
-local base = module.dir:gsub("^bundle:", "") .. '/'
-local dir = base .. ffi.os .. "-" .. ffi.arch
+local base = module.dir:gsub("^bundle:", "")
+local dir = pathJoin(base, ffi.os .. "-" .. ffi.arch)
 local entries = bundle.readdir(dir)
+p(dir, entries)
 assert(entries and #entries == 2, "Expected 2 entries in arch folder")
 local mainPath, wrapperPath = unpack(entries)
 if mainPath:match("wrapper") then
@@ -32,8 +34,8 @@ local wrapper = bundle.action(wrapperPath, function (path)
   return ffi.load(path)
 end)
 
-ffi.cdef(bundle.readfile(base .. "glfw.h"))
-ffi.cdef((bundle.readfile(base .. "wrapper.h"):gsub("^%#[^\n]*", "")))
+ffi.cdef(bundle.readfile(pathJoin(base, "glfw.h")))
+ffi.cdef((bundle.readfile(pathJoin(base, "wrapper.h")):gsub("^%#[^\n]*", "")))
 
 local types = {
   [tonumber(wrapper.GLFWerrorevt)] = {"error", "description"},

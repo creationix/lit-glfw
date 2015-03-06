@@ -12,7 +12,7 @@ WRAPPER_LIB=libwglfw.so
 endif
 
 all: build
-	cmake --build build
+	cmake --build build --config Release
 	cp build/glfw/src/$(BASE_LIB) $(TARGET_DIR)
 	cp build/$(WRAPPER_LIB) $(TARGET_DIR)
 
