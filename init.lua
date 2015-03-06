@@ -1,12 +1,3 @@
-exports.name = "creationix/glfw"
-exports.version = "3.1.2"
-exports.homepage = "https://github.com/creationix/lit-glfw"
-exports.files = {
-  "*.lua",
-  "*.h",
-  "**/$OS-$ARCH**",
-}
-
 local ffi = require('ffi')
 local bundle = require('luvi').bundle
 
