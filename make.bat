@@ -18,6 +18,7 @@ COPY build\Release\%WRAPPER_LIB% %TARGET_DIR%\
 @GOTO :end
 
 :configure
+@IF NOT EXIST glfw git submodule update --init glfw
 cmake -Bbuild -H. -G"Visual Studio 12 Win64" -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF -DGLFW_INSTALL=OFF
 @GOTO :end
 
@@ -30,8 +31,9 @@ cd ..
 @GOTO :end
 
 :test
-@IF NOT EXIST glfw-test\deps CALL make.bat setup
 @CALL make.bat compile
+@IF NOT EXIST glfw-test git submodule update --init glfw-test
+@IF NOT EXIST glfw-test\deps CALL make.bat setup
 SET LUVI_APP=glfw-test
 %LIT_PATH%
 SET "LUVI_APP="
