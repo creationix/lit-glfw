@@ -7,7 +7,7 @@ BASE_LIB=libglfw.3.1.dylib
 WRAPPER_LIB=libwglfw.dylib
 endif
 ifeq ($(LUAJIT_OS), Linux)
-BASE_LIB=libglfw.3.1.so
+BASE_LIB=libglfw.so.3.1
 WRAPPER_LIB=libwglfw.so
 endif
 

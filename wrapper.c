@@ -6,6 +6,11 @@
 static GLFWEvent* GLFWEventHead = NULL;
 static GLFWEvent* GLFWEventTail = NULL;
 
+// Poll of used instances ready for reuse.
+static GLFWEvent* GLFWEventPool = NULL;
+static int GLFWEventPoolSize = 0;
+#define GLFWEventPoolMaxSize 100
+
 GLFWEvent* GLFWEventShift() {
   // printf("head=%p tail=%p\n", GLFWEventHead, GLFWEventTail);
   if (!GLFWEventHead) return NULL;
@@ -16,14 +21,35 @@ GLFWEvent* GLFWEventShift() {
 }
 
 void GLFWEventRelease(GLFWEvent* event) {
-  // TODO: free string copies once we make them.
-  // TODO: recycle these in some sort of free-list.
-  free(event);
+  if (!event) return;
+  if (GLFWEventPoolSize < GLFWEventPoolMaxSize) {
+    printf("Save %p\n", event);
+    GLFWEventPoolSize++;
+    if (GLFWEventPool) GLFWEventPool->next = event;
+    else GLFWEventPool = event;
+    event->next = NULL;
+  }
+  else {
+    printf("Free %p\n", event);
+    // The recycling pool is large enough, let's free this one.
+    free(event);
+  }
 }
 
 static GLFWEvent* GLFWEventPush() {
-  GLFWEvent* event = malloc(sizeof(*event));
-  // TODO: pull from free-list once implemented.
+  GLFWEvent* event;
+  // If there is an old event in the pool, reuse it.
+  if (GLFWEventPool) {
+    GLFWEventPoolSize--;
+    event = GLFWEventPool;
+    GLFWEventPool = event->next;
+    printf("Reuse %p\n", event);
+  }
+  // Otherwise allocate a new event.
+  else {
+    event = malloc(sizeof(*event));
+    printf("Allocate %p\n", event);
+  }
   event->next = NULL;
   if (GLFWEventTail) {
     GLFWEventTail->next = event;
