@@ -10,7 +10,7 @@ static GLFWEvent* GLFWEventPool = NULL;
 static int GLFWEventPoolSize = 0;
 #define GLFWEventPoolMaxSize 10
 
-GLFWEvent* GLFWEventShift() {
+GLFWEvent* glfwEventShift() {
   if (!GLFWEventHead) return NULL;
   GLFWEvent* event = GLFWEventHead;
   GLFWEventHead = GLFWEventHead->next;
@@ -18,7 +18,7 @@ GLFWEvent* GLFWEventShift() {
   return event;
 }
 
-void GLFWEventRelease(GLFWEvent* event) {
+void glfwEventRelease(GLFWEvent* event) {
   if (!event) return;
   assert(GLFWEventPoolSize == 0 || GLFWEventPool);
   if (GLFWEventPoolSize < GLFWEventPoolMaxSize) {
@@ -32,7 +32,7 @@ void GLFWEventRelease(GLFWEvent* event) {
   }
 }
 
-static GLFWEvent* GLFWEventPush() {
+static GLFWEvent* glfwEventPush() {
   GLFWEvent* event;
   // If there is an old event in the pool, reuse it.
   if (GLFWEventPool) {
@@ -56,85 +56,85 @@ static GLFWEvent* GLFWEventPush() {
   return event;
 }
 
-void GLFWerrorCallback(int error, const char* description) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwErrorCallback(int error, const char* description) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWerrorevt;
   event->error = error;
   event->description = description;
 }
-void GLFWwindowposCallback(GLFWwindow* window, int xpos, int ypos) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwWindowPosCallback(GLFWwindow* window, int xpos, int ypos) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWwindowposevt;
   event->window = window;
   event->xpos = xpos;
   event->ypos = ypos;
 }
-void GLFWwindowsizeCallback(GLFWwindow* window, int width, int height) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwWindowSizeCallback(GLFWwindow* window, int width, int height) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWwindowsizeevt;
   event->window = window;
   event->width = width;
   event->height = height;
 }
-void GLFWwindowcloseCallback(GLFWwindow* window) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwWindowCloseCallback(GLFWwindow* window) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWwindowcloseevt;
   event->window = window;
 }
-void GLFWwindowrefreshCallback(GLFWwindow* window) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwWindowRefreshCallback(GLFWwindow* window) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWwindowrefreshevt;
   event->window = window;
 }
-void GLFWwindowfocusCallback(GLFWwindow* window, int focused) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwWindowFocusCallback(GLFWwindow* window, int focused) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWwindowfocusevt;
   event->window = window;
   event->focused = focused;
 }
-void GLFWwindowiconifyCallback(GLFWwindow* window, int iconified) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwWindowIconifyCallback(GLFWwindow* window, int iconified) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWwindowiconifyevt;
   event->window = window;
   event->iconified = iconified;
 }
-void GLFWframebuffersizeCallback(GLFWwindow* window, int width, int height) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWframebuffersizeevt;
   event->window = window;
   event->width = width;
   event->height = height;
 }
-void GLFWmousebuttonCallback(GLFWwindow* window, int button, int action, int mods) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWmousebuttonevt;
   event->window = window;
   event->button = button;
   event->action = action;
   event->mods = mods;
 }
-void GLFWcursorposCallback(GLFWwindow* window, double xpos, double ypos) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwCursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWcursorposevt;
   event->window = window;
   event->xpos = xpos;
   event->ypos = ypos;
 }
-void GLFWcursorenterCallback(GLFWwindow* window, int entered) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwCursorEnterCallback(GLFWwindow* window, int entered) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWcursorenterevt;
   event->window = window;
   event->entered = entered;
 }
-void GLFWscrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWscrollevt;
   event->window = window;
   event->xoffset = xoffset;
   event->yoffset = yoffset;
 }
-void GLFWkeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWkeyevt;
   event->window = window;
   event->key = key;
@@ -142,29 +142,29 @@ void GLFWkeyCallback(GLFWwindow* window, int key, int scancode, int action, int 
   event->action = action;
   event->mods = mods;
 }
-void GLFWcharCallback(GLFWwindow* window, unsigned int codepoint) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwCharCallback(GLFWwindow* window, unsigned int codepoint) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWcharevt;
   event->window = window;
   event->codepoint = codepoint;
 }
-void GLFWcharmodsCallback(GLFWwindow* window, unsigned int codepoint, int mods) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwCharModsCallback(GLFWwindow* window, unsigned int codepoint, int mods) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWcharmodsevt;
   event->window = window;
   event->codepoint = codepoint;
   event->mods = mods;
 }
-void GLFWdropCallback(GLFWwindow* window, int count, const char** paths) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwDropCallback(GLFWwindow* window, int count, const char** paths) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWdropevt;
   event->window = window;
   event->count = count;
   // TODO: make copy of paths.
   event->paths = paths;
 }
-void GLFWmonitorCallback(GLFWmonitor* monitor, int action) {
-  GLFWEvent* event = GLFWEventPush();
+void glfwMonitorCallback(GLFWmonitor* monitor, int action) {
+  GLFWEvent* event = glfwEventPush();
   event->type = GLFWmonitorevt;
   event->monitor = monitor;
   event->event = action;

@@ -58,24 +58,24 @@ typedef struct GLFWEvent{
 } GLFWEvent;
 
 // Call this to get the next event from the queue.  Will return NULL if empty
-GLFWEvent* GLFWEventShift();
+GLFWEvent* glfwEventShift();
 // Call this when done to release the event to prevent leaks.
-void GLFWEventRelease(GLFWEvent* event);
+void glfwEventRelease(GLFWEvent* event);
 
-void GLFWerrorCallback(int error, const char* description);
-void GLFWwindowposCallback(GLFWwindow* window, int xpos, int ypos);
-void GLFWwindowsizeCallback(GLFWwindow* window, int width, int height);
-void GLFWwindowcloseCallback(GLFWwindow*);
-void GLFWwindowrefreshCallback(GLFWwindow*);
-void GLFWwindowfocusCallback(GLFWwindow*,int);
-void GLFWwindowiconifyCallback(GLFWwindow*,int);
-void GLFWframebuffersizeCallback(GLFWwindow*,int,int);
-void GLFWmousebuttonCallback(GLFWwindow*,int,int,int);
-void GLFWcursorposCallback(GLFWwindow*,double,double);
-void GLFWcursorenterCallback(GLFWwindow*,int);
-void GLFWscrollCallback(GLFWwindow*,double,double);
-void GLFWkeyCallback(GLFWwindow*,int,int,int,int);
-void GLFWcharCallback(GLFWwindow*,unsigned int);
-void GLFWcharmodsCallback(GLFWwindow*,unsigned int,int);
-void GLFWdropCallback(GLFWwindow*,int,const char**);
-void GLFWmonitorCallback(GLFWmonitor*,int);
+void glfwErrorCallback(int error, const char* description);
+void glfwWindowPosCallback(GLFWwindow* window, int xpos, int ypos);
+void glfwWindowSizeCallback(GLFWwindow* window, int width, int height);
+void glfwWindowCloseCallback(GLFWwindow* window);
+void glfwWindowRefreshCallback(GLFWwindow* window);
+void glfwWindowFocusCallback(GLFWwindow* window, int focused);
+void glfwWindowIconifyCallback(GLFWwindow* window, int iconified);
+void glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height);
+void glfwMouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+void glfwCursorPosCallback(GLFWwindow* window, double xpos, double ypos);
+void glfwCursorEnterCallback(GLFWwindow* window, int entered);
+void glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void glfwCharCallback(GLFWwindow* window, unsigned int codepoint);
+void glfwCharModsCallback(GLFWwindow* window, unsigned int codepoint, int mods);
+void glfwDropCallback(GLFWwindow* window, int count, const char** paths);
+void glfwMonitorCallback(GLFWmonitor* monitor, int action);
