@@ -11,7 +11,7 @@ BASE_LIB=libglfw.so.3.1
 WRAPPER_LIB=libwglfw.so
 endif
 
-all: build
+libs: build
 	cmake --build build --config Release
 	cp build/glfw/src/$(BASE_LIB) $(TARGET_DIR)
 	cp build/$(WRAPPER_LIB) $(TARGET_DIR)
@@ -21,5 +21,13 @@ build:
 	  -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF \
 	  -DGLFW_BUILD_DOCS=OFF -DGLFW_INSTALL=OFF
 
+glfw-test/deps:
+	cd glfw-test && lit install
+	rm -rf glfw-test/deps/glfw
+	ln -s ../.. glfw-test/deps/glfw
+
+test: libs glfw-test/deps
+	LUVI_APP=glfw-test lit
+
 clean:
-	rm -rf build
+	rm -rf build glfw-test/deps

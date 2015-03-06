@@ -18,7 +18,6 @@ local pathJoin = require('luvi').path.join
 local base = module.dir:gsub("^bundle:", "")
 local dir = pathJoin(base, ffi.os .. "-" .. ffi.arch)
 local entries = bundle.readdir(dir)
-p(dir, entries)
 assert(entries and #entries == 2, "Expected 2 entries in arch folder")
 local mainPath, wrapperPath = unpack(entries)
 if mainPath:match("wrapper") then
