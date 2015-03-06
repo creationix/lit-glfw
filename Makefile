@@ -16,12 +16,18 @@ libs: build
 	cp build/glfw/src/$(BASE_LIB) $(TARGET_DIR)
 	cp build/$(WRAPPER_LIB) $(TARGET_DIR)
 
-build:
+glfw:
+	git submodule update --init glfw
+
+build: glfw
 	cmake -Bbuild -H. -GNinja  -Wno-dev -DBUILD_SHARED_LIBS=ON \
 	  -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF \
 	  -DGLFW_BUILD_DOCS=OFF -DGLFW_INSTALL=OFF
 
-glfw-test/deps:
+glfw-test:
+	git submodule update --init glfw-test
+
+glfw-test/deps: glfw-test
 	cd glfw-test && lit install
 	rm -rf glfw-test/deps/glfw
 	ln -s ../.. glfw-test/deps/glfw
