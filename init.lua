@@ -34,7 +34,7 @@ local wrapper = bundle.action(wrapperPath, function (path)
 end)
 
 ffi.cdef(bundle.readfile(pathJoin(base, "glfw.h")))
-ffi.cdef((bundle.readfile(pathJoin(base, "wrapper.h")):gsub("^%#[^\n]*", "")))
+ffi.cdef((bundle.readfile(pathJoin(base, "wrapper.h")):gsub("^%#[^\n]*", ""):gsub("GLFWAPI", "")))
 
 local types = {
   [tonumber(wrapper.GLFWerrorevt)] = {"error", "description"},
