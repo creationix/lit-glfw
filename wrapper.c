@@ -1,6 +1,7 @@
 #include <GLFW/glfw3.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 #include "wrapper.h"
 
 static GLFWEvent* GLFWEventHead = NULL;
@@ -9,7 +10,7 @@ static GLFWEvent* GLFWEventTail = NULL;
 // Poll of used instances ready for reuse.
 static GLFWEvent* GLFWEventPool = NULL;
 static int GLFWEventPoolSize = 0;
-#define GLFWEventPoolMaxSize 100
+#define GLFWEventPoolMaxSize 10
 
 GLFWEvent* GLFWEventShift() {
   // printf("head=%p tail=%p\n", GLFWEventHead, GLFWEventTail);
@@ -22,12 +23,12 @@ GLFWEvent* GLFWEventShift() {
 
 void GLFWEventRelease(GLFWEvent* event) {
   if (!event) return;
+  printf("release - size=%d root=%p\n", GLFWEventPoolSize, GLFWEventPool);
   if (GLFWEventPoolSize < GLFWEventPoolMaxSize) {
     printf("Save %p\n", event);
+    event->next = GLFWEventPool;
+    GLFWEventPool = event;
     GLFWEventPoolSize++;
-    if (GLFWEventPool) GLFWEventPool->next = event;
-    else GLFWEventPool = event;
-    event->next = NULL;
   }
   else {
     printf("Free %p\n", event);
@@ -38,6 +39,7 @@ void GLFWEventRelease(GLFWEvent* event) {
 
 static GLFWEvent* GLFWEventPush() {
   GLFWEvent* event;
+  printf("push - size=%d root=%p\n", GLFWEventPoolSize, GLFWEventPool);
   // If there is an old event in the pool, reuse it.
   if (GLFWEventPool) {
     GLFWEventPoolSize--;
