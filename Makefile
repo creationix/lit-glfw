@@ -33,7 +33,7 @@ glfw-test/deps: glfw-test
 	ln -s ../.. glfw-test/deps/glfw
 
 test: libs glfw-test/deps
-	LUVI_APP=glfw-test lit
+	luvi glfw-test
 
 clean:
 	rm -rf build glfw-test/deps

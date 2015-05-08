@@ -1,31 +1,16 @@
+local libs = {
+  ["Windows-x64"] = {"glfw3.dll", "wglfw.dll"},
+  ["Linux-x64"] = {"libglfw.so.3.1", "libwglfw.so"},
+  ["OSX-x64"] = {"libglfw.3.1.dylib", "libwglfw.dylib"},
+}
+
 local ffi = require('ffi')
-local bundle = require('luvi').bundle
+ffi.cdef(module:load("glfw.h"))
+ffi.cdef((module:load("wrapper.h"):gsub("^%#[^\n]*", ""):gsub("GLFWAPI", "")))
 
--- Workaround to polyfill bundle.action till luvi is updated.
-require('./bundle-action')
-local pathJoin = require('luvi').path.join
-
--- Get path
-local base = module.dir:gsub("^bundle:", "")
-local dir = pathJoin(base, ffi.os .. "-" .. ffi.arch)
-local entries = bundle.readdir(dir)
-assert(entries and #entries == 2, "Expected 2 entries in arch folder")
-local mainPath, wrapperPath = unpack(entries)
-if mainPath:match("wrapper") then
-  mainPath, wrapperPath = wrapperPath, mainPath
-end
-mainPath = dir .. '/' .. mainPath
-wrapperPath = dir .. '/' .. wrapperPath
-
-local glfw = bundle.action(mainPath, function (path)
-  return ffi.load(path)
-end)
-local wrapper = bundle.action(wrapperPath, function (path)
-  return ffi.load(path)
-end)
-
-ffi.cdef(bundle.readfile(pathJoin(base, "glfw.h")))
-ffi.cdef((bundle.readfile(pathJoin(base, "wrapper.h")):gsub("^%#[^\n]*", ""):gsub("GLFWAPI", "")))
+local arch = ffi.os .. "-" .. ffi.arch
+local glfw = module:action(arch .. "/" .. libs[arch][1], ffi.load)
+local wrapper = module:action(arch .. "/" .. libs[arch][2], ffi.load)
 
 local types = {
   [tonumber(wrapper.GLFWerrorevt)] = {"error", "description"},

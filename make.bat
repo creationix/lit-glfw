@@ -2,7 +2,8 @@
 @SET LUAJIT_OS=Windows
 @SET LUAJIT_ARCH=x64
 @SET TARGET_DIR=%LUAJIT_OS%-%LUAJIT_ARCH%
-@SET LIT_PATH=C:\Code\lit.exe
+@SET LIT_PATH=lit.exe
+@SET LUVI_PATH=luvi.exe
 @SET GLFW_DIR=%~d0%~p0
 
 @SET BASE_LIB=glfw3.dll
@@ -34,9 +35,7 @@ cd ..
 @CALL make.bat compile
 @IF NOT EXIST glfw-test git submodule update --init glfw-test
 @IF NOT EXIST glfw-test\deps CALL make.bat setup
-SET LUVI_APP=glfw-test
-%LIT_PATH%
-SET "LUVI_APP="
+%LUVI_PATH% glfw-test
 @GOTO :end
 
 :clean
